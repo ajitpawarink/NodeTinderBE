@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
 
-app.get('/user/:userid', (req,resp)=>{
+app.get('/user/:userid', (req,resp,next)=>{
     console.log(req.query)
     console.log(req.params)
-    resp.send("get User")
-});   
+    next();
+},(req,resp)=>{
+    console.log("second callback")
+    resp.send("get User");
+});
 
 app.post('/user', (req,resp)=>{
     resp.send("post User")

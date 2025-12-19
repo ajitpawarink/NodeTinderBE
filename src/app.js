@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 
-app.get('/user', (req,resp)=>{
+app.get('/user/:userid', (req,resp)=>{
+    console.log(req.query)
+    console.log(req.params)
     resp.send("get User")
 });   
 

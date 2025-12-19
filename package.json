@@ -1,0 +1,25 @@
+{
+  "name": "devtinderbe",
+  "version": "1.0.0",
+  "description": "tender project for demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "mongo",
+    "express",
+    "javascript",
+    "backend",
+    "service"
+  ],
+  "author": "AJ",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

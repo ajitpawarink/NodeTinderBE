@@ -1,6 +1,14 @@
 const express = require('express');
 const app = express();
 
+app.get('/user', (req,resp)=>{
+    resp.send("get User")
+});   
+
+app.post('/user', (req,resp)=>{
+    resp.send("post User")
+});
+
 app.use('/test', (req,resp)=>{
     resp.send("heelo test")
 });

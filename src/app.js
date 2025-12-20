@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
+const {connectDB} = require('./config/database');
+
+const User = require('./models/user');
+/*
 const {adminAuth,userAuth} = require('./middlewares/authHandler');
 const {errHandle} = require('./middlewares/errHandler');
-const {connectDB} = require('./config/database');
 
 app.use('/user', userAuth);
 app.use('/admin', adminAuth);
@@ -34,6 +37,24 @@ app.post('/admin', (req,resp)=>{
 });
 
 app.use('/', errHandle);
+*/
+
+app.post('/signup', async (req,resp)=>{
+    const userObj = new User({
+        firstName:"dista",
+        lastName:"mosta",
+        emailId:"mosta@mosta.com",
+        password:"mosta123"
+
+    });
+    try {
+        await userObj.validate();
+        resp.send('User signed up successfully');
+    } catch (validationError) {
+        return resp.status(400).send(validationError.message);
+    }
+    
+});
 
 connectDB().then(()=>{
     console.log('Connected to Database successfully');

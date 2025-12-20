@@ -1,6 +1,6 @@
 const adminAuth = (req,resp, next)=>{
     console.log('running admin auth middleware');
-    const token = 'xyzz';
+    const token = 'xyz';
     if(token === 'xyz'){
         next();
     }else{
@@ -18,4 +18,4 @@ const userAuth = (req,resp, next)=>{
     }
 }
 
- module.exports = { adminAuth, userAuth };
+module.exports = {adminAuth, userAuth};

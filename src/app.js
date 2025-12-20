@@ -54,6 +54,31 @@ app.post('/signup', async (req,resp)=>{
     
 });
 
+app.get('/user', async (req,resp)=>{
+    try {
+        const emailId = req.body.emailId;
+        const userObj = await User.findOne({emailId:emailId});
+        if( !userObj ){
+            return resp.status(404).send('No user found');
+        }
+        resp.json(userObj);
+    } catch (err) {
+        resp.status(500).send('Error fetching users');
+    }      
+});
+
+app.get('/feed', async (req,resp)=>{
+    try {
+        const allUsers = await User.find({});
+        if( allUsers.length === 0 ){
+            return resp.status(404).send('No users found');
+        }
+        resp.json(allUsers);
+    } catch (err) {
+        resp.status(500).send('Error fetching users');
+    }      
+});
+
 connectDB().then(()=>{
     console.log('Connected to Database successfully');
     app.listen(3000, ()=>{

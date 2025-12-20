@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 const {adminAuth,userAuth} = require('./middlewares/authHandler');
 const {errHandle} = require('./middlewares/errHandler');
-
-
+const {connectDB} = require('./config/database');
 
 app.use('/user', userAuth);
 app.use('/admin', adminAuth);
@@ -36,6 +35,13 @@ app.post('/admin', (req,resp)=>{
 
 app.use('/', errHandle);
 
-app.listen(3000, ()=>{
-    console.log('Server is running on port 3000');
-});
+connectDB().then(()=>{
+    console.log('Connected to Database successfully');
+    app.listen(3000, ()=>{
+        console.log('Server is running on port 3000');
+    });
+}).catch((err)=>{
+    console.error('Failed to connect to database', err);
+})
+
+

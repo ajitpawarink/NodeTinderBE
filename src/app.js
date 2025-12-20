@@ -39,16 +39,14 @@ app.post('/admin', (req,resp)=>{
 app.use('/', errHandle);
 */
 
-app.post('/signup', async (req,resp)=>{
-    const userObj = new User({
-        firstName:"dista",
-        lastName:"mosta",
-        emailId:"mosta@mosta.com",
-        password:"mosta123"
+app.use(express.json());
 
-    });
+app.post('/signup', async (req,resp)=>{
+    
+    const userObj = new User(req.body);
+
     try {
-        await userObj.validate();
+        await userObj.save();
         resp.send('User signed up successfully');
     } catch (validationError) {
         return resp.status(400).send(validationError.message);

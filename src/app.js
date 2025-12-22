@@ -81,14 +81,25 @@ app.get('/user', async (req,resp)=>{
 
 app.patch('/user', async(req,resp)=>{
     try{
-        const uid = req.body.userId
+        const uid = req.body.userId;
         const user = await User.findByIdAndUpdate(uid, req.body, {new: true,runValidators:true});
+        const data = req.body;
+        const ALLOWED_UPDATES = ['userId','firstName','lastName','age','gender','photoUrl','about','skills'];
+        const isAllowedUpdate = Object.keys(data).every((update)=>{
+            return ALLOWED_UPDATES.includes(update);
+        });
+        if( !isAllowedUpdate ){
+            throw new Error('Invalid updates!');
+        }
         if(!user){
             return resp.status(404).send('User not found');
         }
+        if( data?.skills.length > 10 ){
+            throw new Error('Cannot add more than 10 skills');
+        }
         resp.json(user);
     } catch (err) {
-        resp.status(500).send('Error updating user');
+        resp.status(500).send('Update Failed' + err.message);
     }
 });
 

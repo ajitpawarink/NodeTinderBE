@@ -54,6 +54,18 @@ app.post('/signup', async (req,resp)=>{
     
 });
 
+app.get('/feed', async (req,resp)=>{
+    try {
+        const allUsers = await User.find({});
+        if( allUsers.length === 0 ){
+            return resp.status(404).send('No users found');
+        }
+        resp.json(allUsers);
+    } catch (err) {
+        resp.status(500).send('Error fetching users');
+    }      
+});
+
 app.get('/user', async (req,resp)=>{
     try {
         const emailId = req.body.emailId;
@@ -67,16 +79,30 @@ app.get('/user', async (req,resp)=>{
     }      
 });
 
-app.get('/feed', async (req,resp)=>{
-    try {
-        const allUsers = await User.find({});
-        if( allUsers.length === 0 ){
-            return resp.status(404).send('No users found');
+app.patch('/user', async(req,resp)=>{
+    try{
+        const uid = req.body.userId
+        const user = await User.findByIdAndUpdate(uid, req.body, {new: true,runValidators:true});
+        if(!user){
+            return resp.status(404).send('User not found');
         }
-        resp.json(allUsers);
+        resp.json(user);
     } catch (err) {
-        resp.status(500).send('Error fetching users');
-    }      
+        resp.status(500).send('Error updating user');
+    }
+});
+
+app.delete('/user', async(req,resp)=>{
+    try{
+        const uid = req.body.userId
+        const user = await User.findByIdAndDelete(uid);
+        if(!user){
+            return resp.status(404).send('User not found');
+        }
+        resp.send('User deleted successfully');
+    } catch (err) {
+        resp.status(500).send('Error fetching user');
+    }
 });
 
 connectDB().then(()=>{

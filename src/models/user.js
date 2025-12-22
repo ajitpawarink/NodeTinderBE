@@ -10,10 +10,23 @@ const userSchema = new mongoose.Schema({
             }   
         }
     },
-    password:{type:String},
+    password:{type:String,
+        required:true,
+        validate(value){
+            if( validator.isStrongPassword(value) === false ){
+                throw new Error('Password must be strong password');
+            }
+        }
+    },
     age:{type:Number},
     gender:{type:String},
-    photoUrl:{type:String,default:'https://www.geographyandyou.com/images/user-profile.png'},
+    photoUrl:{type:String,default:'https://www.geographyandyou.com/images/user-profile.png',
+        validate(value){
+            if( !validator.isURL(value) ){
+                throw new Error('Invalid URL format for photoUrl');
+            }
+        }
+    },
     about:{type:String,default:'No details added'},
     skills:{type:[String]}
 },{timestamps:true})

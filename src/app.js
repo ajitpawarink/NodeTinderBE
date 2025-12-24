@@ -2,9 +2,13 @@ const express = require('express');
 const app = express();
 const {connectDB} = require('./config/database');
 const {signupValidations} = require('./utils/validations');
+const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 
 const User = require('./models/user');
+
+app.use(express.json());
+app.use(cookieParser());
 /*
 const {adminAuth,userAuth} = require('./middlewares/authHandler');
 const {errHandle} = require('./middlewares/errHandler');
@@ -41,8 +45,6 @@ app.post('/admin', (req,resp)=>{
 app.use('/', errHandle);
 */
 
-app.use(express.json());
-
 app.post('/signup', async (req,resp)=>{
     
     try {
@@ -71,7 +73,7 @@ app.post('/login', async (req,resp)=>{
         if( isPasswordMatch === false ){
             throw new Error('Invalid Credentials');
         }
-
+        resp.cookie('token','thisisjustacookierandom');
         resp.send('Login Successful');
 
     }catch(err){
@@ -81,6 +83,7 @@ app.post('/login', async (req,resp)=>{
 
 app.get('/feed', async (req,resp)=>{
     try {
+        console.log(req.cookies);
         const allUsers = await User.find({});
         if( allUsers.length === 0 ){
             return resp.status(404).send('No users found');
